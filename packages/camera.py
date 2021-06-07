@@ -79,7 +79,7 @@ class Camera:
             self.cap.release()
         if hasattr(self, 'thread'):
             self.thread.join()
-        del self.cap
+        # del self.cap
             
             
     def restart(self):
