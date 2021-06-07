@@ -366,7 +366,7 @@ def execute(change):
     # If robot is not blocked, move towards target
     else:
         path = str(round(prob_cond * 100, 1)) + "% - NORMAL"
-        # check_time_normal = time.time()
+        check_time_normal = time.time()
 
     x = 200
     y = 232
