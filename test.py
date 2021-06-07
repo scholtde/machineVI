@@ -163,6 +163,8 @@ def train_bot():
             torch.save(t_model.state_dict(), BEST_MODEL_PATH)
             best_accuracy = test_accuracy
 
+        return True
+
 
 def prepare_ui(full_screen):
     pygame.display.set_caption('machineVI v.1.0')
@@ -225,16 +227,26 @@ def ui_labels():
     rec = 0, 77, 77
     txt_col = 255, 255, 255
 
-    write_text(1, "X-value", 95, x, y, size, w, size, txt_col, rec)
+    write_text(1, "NOR-IMG", 95, x, y, size, w, size, txt_col, rec)
     y = y+offset
-    write_text(1, "Y-value", 95, x, y, size, w, size, txt_col, rec)
-    y = y+offset
-    write_text(1, "G-CODE", 105, x, y, size, w, size, txt_col, rec)
+    write_text(1, "DAM-IMG", 95, x, y, size, w, size, txt_col, rec)
     y = y+offset
     write_text(1, "STATUS", 100, x, y, size, w, size, txt_col, rec)
+
+    # Default values
+    x = 200
+    w = 250
+    offset = 43
+
+    write_text(1, str(normal_count), 5, x, y, size, w, size, txt_col, rec)
+    y = y + offset
+    write_text(1, str(damage_count), 5, x, y, size, w, size, txt_col, rec)
+    y = y + offset
+    write_text(1, "DONE", 5, x, y, size, w, size, txt_col, rec)
+    # --------------
  
     x = 12
-    y = 275
+    y = 232
     size = 55
     w = 200
     offset = 60
@@ -408,6 +420,50 @@ def main():
 
                 if event.key == pygame.K_r:
                     camera.exec_rotate()
+
+                if event.key == pygame.K_n:
+                    time.sleep(1)
+                    print("Save NORMAL")
+                    save_normal()
+
+                    t_y = 110
+                    t_x = 200
+                    size = 30
+                    w = 250
+                    offset = 43
+                    rec = 0, 77, 77
+                    txtCol = 255, 255, 255
+
+                    btnAL = write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    t_y = t_y + offset
+                    btnVT = write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    t_y = t_y + offset
+                    btnVT = write_text(1, "DONE", 5, t_x, t_y, size, w, size, txtCol, rec)
+
+
+                if event.key == pygame.K_d:
+                    time.sleep(1)
+                    print("Save DAMAGE")
+                    save_damage()
+
+                    t_y = 110
+                    t_x = 200
+                    size = 30
+                    w = 250
+                    offset = 43
+                    rec = 0, 77, 77
+                    txtCol = 255, 255, 255
+
+                    btnAL = write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    t_y = t_y + offset
+                    btnVT = write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    t_y = t_y + offset
+                    btnVT = write_text(1, "DONE", 5, t_x, t_y, size, w, size, txtCol, rec)
+
+                if event.key == pygame.K_t:
+                    time.sleep(1)
+                    print("Training mode..")
+                    train_bot()
 
 
 # Load UI
