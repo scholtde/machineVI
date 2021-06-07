@@ -370,6 +370,7 @@ def execute(change):
     rec = 0, 0, 0
     txt_col = 255, 255, 255
     write_text(1, mode, 5, x, y, size, w, size, txt_col, rec)
+    y = y + offset
 
     # turn right if blocked
     if prob_cond >= 0.50:
@@ -377,17 +378,15 @@ def execute(change):
             check_time_damage = time.time()
             cond = "DAMAGE - {}%".format(round(prob_cond * 100, 0))
             txt_col = 255, 0, 0
-            y = y + offset
             write_text(1, cond, 5, x, y, size, w, size, txt_col, rec)
 
     # If robot is not blocked, move towards target
     else:
-        if pause(check_time_normal, 0.7):
-            check_time_normal = time.time()
-            cond = "NORMAL - {}%".format(round(prob_cond * 100, 0))
-            txt_col = 0, 255, 255
-            y = y + offset
-            write_text(1, cond, 5, x, y, size, w, size, txt_col, rec)
+        # if pause(check_time_normal, 0.7):
+        check_time_normal = time.time()
+        cond = "NORMAL - {}%".format(round(prob_cond * 100, 0))
+        txt_col = 0, 255, 255
+        write_text(1, cond, 5, x, y, size, w, size, txt_col, rec)
 
     # Update image
     # image_widget.value = bgr8_to_jpeg(image)
