@@ -154,7 +154,7 @@ def train_bot():
         for images, labels in iter(test_loader):
             images = images.to(compute_device)
             labels = labels.to(compute_device)
-            outputs = model(images)
+            outputs = t_model(images)
             test_error_count += float(torch.sum(torch.abs(labels - outputs.argmax(1))))
 
         test_accuracy = 1.0 - float(test_error_count) / float(len(test_dataset))
