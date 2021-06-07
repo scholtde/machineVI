@@ -169,13 +169,13 @@ def train_bot():
         w = 250
         offset = 43
         rec = 0, 77, 77
-        txtCol = 255, 255, 255
+        txt_col = 255, 255, 255
 
-        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
         t_y = t_y + offset
-        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
         t_y = t_y + offset
-        write_text(1, '%d: %f' % (epoch, test_accuracy), 5, t_x, t_y, size, w, size, txtCol, rec)
+        write_text(1, '%d: %f' % (epoch, test_accuracy), 5, t_x, t_y, size, w, size, txt_col, rec)
 
         if test_accuracy > best_accuracy:
             torch.save(t_model.state_dict(), BEST_MODEL_PATH)
@@ -353,7 +353,8 @@ def execute(change):
     # execute collision model to determine the condition
     # collision_output = collision_model(preprocess(image)).detach().cpu()
     collision_output = collision_model(preprocess(image))
-    # we apply the `softmax` function to normalize the output vector so it sums to 1 (which makes it a probability distribution)
+    # we apply the `softmax` function to normalize the output vector so it sums to 1
+    # (which makes it a probability distribution)
     collision_output = F.softmax(collision_output, dim=1)
     prob_cond = float(collision_output.flatten()[0])
     # blocked_widget.value = prob_blocked
@@ -363,7 +364,6 @@ def execute(change):
     if prob_cond >= 0.50:
         path = str(round(prob_cond * 100, 1)) + "% - DAMAGE"
         if pause(check_time_damage, 0.7):
-            print("DAMAGE detected")
             check_time_damage = time.time()
 
     # If robot is not blocked, move towards target
@@ -421,6 +421,13 @@ def generate():
 
 
 def main():
+    global collision_model
+    global device
+    global mean
+    global stdev
+    global normalize
+    global camera
+
     while True:
         # Check Ctrl+C
         try:
@@ -454,14 +461,13 @@ def main():
                     w = 250
                     offset = 43
                     rec = 0, 77, 77
-                    txtCol = 255, 255, 255
+                    txt_col = 255, 255, 255
 
-                    btnAL = write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
                     t_y = t_y + offset
-                    btnVT = write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
                     t_y = t_y + offset
-                    btnVT = write_text(1, "DONE", 5, t_x, t_y, size, w, size, txtCol, rec)
-
+                    write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
 
                 if event.key == pygame.K_d:
                     time.sleep(1)
@@ -474,16 +480,17 @@ def main():
                     w = 250
                     offset = 43
                     rec = 0, 77, 77
-                    txtCol = 255, 255, 255
+                    txt_col = 255, 255, 255
 
-                    btnAL = write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
                     t_y = t_y + offset
-                    btnVT = write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
                     t_y = t_y + offset
-                    btnVT = write_text(1, "DONE", 5, t_x, t_y, size, w, size, txtCol, rec)
+                    write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
 
                 if event.key == pygame.K_t:
                     time.sleep(1)
+                    camera.stop()
                     print("Training mode..")
                     x = 200
                     y = 232
@@ -509,6 +516,8 @@ def main():
                         normalize = torchvision.transforms.Normalize(mean, stdev)
 
                         print("Training Complete!")
+                        print("Restarting camera")
+                        camera = Camera(width=width, height=height, rotate=False)
 
 
 # Load UI
