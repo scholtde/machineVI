@@ -529,6 +529,7 @@ def main():
 
                 if event.key == pygame.K_DELETE:
                     # Remove dataset
+                    print("Removing dataset!")
                     files = glob.glob('{}/*'.format(normal_dir))
                     for f in files:
                         os.remove(f)
