@@ -39,8 +39,8 @@ import threading
 
 # Data collector
 print("Setup DATA Collector")
-normal_dir = 'dataset/free'
-damage_dir = 'dataset/blocked'
+normal_dir = 'dataset/normal'
+damage_dir = 'dataset/damage'
 try:
     os.makedirs(normal_dir)
     os.makedirs(damage_dir)
