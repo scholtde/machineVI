@@ -174,7 +174,7 @@ def prepare_ui(full_screen):
         surface = pygame.display.set_mode((s_width, s_height), pygame.FULLSCREEN, 32)
     else:
         s_width = 510
-        s_height = 750
+        s_height = 700
         surface = pygame.display.set_mode((s_width, s_height), 0, 32)
  
     icon = pygame.image.load('img/RCT_Logo_205x71l.png')
@@ -351,7 +351,7 @@ def execute(change):
         # check_time_normal = time.time()
 
     x = 200
-    y = 275
+    y = 232
     size = 55
     w = 270
     offset = 60
