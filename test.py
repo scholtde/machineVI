@@ -16,9 +16,9 @@ import os
 import time
 import pygame, sys
 import pygame.locals
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 from uuid import uuid1
-from jetbot import ObjectDetector
+# from jetbot import ObjectDetector
 from packages import Camera
 import torch
 import torch.optim as optim
@@ -29,7 +29,7 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 import cv2
 import numpy as np
-from jetbot import bgr8_to_jpeg
+# from jetbot import bgr8_to_jpeg
 
 from flask import Response
 from flask import Flask
