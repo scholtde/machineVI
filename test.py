@@ -234,6 +234,7 @@ def ui_labels():
     write_text(1, "STATUS", 100, x, y, size, w, size, txt_col, rec)
 
     # Default values
+    y = 110
     x = 200
     w = 250
     offset = 43
