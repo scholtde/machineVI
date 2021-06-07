@@ -267,16 +267,16 @@ def save_normal():
     global normal_dir, normal_count
     save_snapshot(normal_dir)
     normal_count = len(os.listdir(normal_dir))
-    print("Free    Count : ", normal_count)
-    print("Blocked Count : ", damage_count)
+    print("Normal Count : ", normal_count)
+    print("Damage Count : ", damage_count)
 
     
 def save_damage():
     global damage_dir, damage_count
     save_snapshot(damage_dir)
     damage_count = len(os.listdir(damage_dir))
-    print("Free    Count : ", normal_count)
-    print("Blocked Count : ", damage_count)
+    print("Normal Count : ", normal_count)
+    print("Damage Count : ", damage_count)
 
 
 def preprocess(camera_value):
