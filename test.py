@@ -56,9 +56,9 @@ width = 300
 height = 300
 camera = Camera(width=width, height=height, rotate=False)
 
-# SSD Object detector
-print("Loading SSD Object Detector")
-model = ObjectDetector('models/object_detect/ssd_mobilenet_v2_coco.engine')
+# # SSD Object detector
+# print("Loading SSD Object Detector")
+# model = ObjectDetector('models/object_detect/ssd_mobilenet_v2_coco.engine')
 
 # Collision Detector
 print("Loading Collision Model")
