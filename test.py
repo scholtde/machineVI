@@ -523,6 +523,7 @@ def main():
 
                         print("Training Complete!")
                         print("Restarting camera")
+                        del camera
                         camera = Camera(width=width, height=height, rotate=False)
 
 

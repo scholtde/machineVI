@@ -53,7 +53,7 @@ class Camera:
     def capture_frames(self):
         while True:
             if self.exec_stop:
-                return
+                break
 
             re, img = self.cap.read()
             if re:
@@ -73,11 +73,9 @@ class Camera:
         if not hasattr(self, 'thread') or not self.thread.isAlive():
             self.thread = threading.Thread(target=self.capture_frames)
             self.thread.start()
-            self.thread.join()
-            self.cap.release()
 
     def stop(self):
-        self.exec_stop = False
+        self.exec_stop = True
         # if hasattr(self, 'cap'):
         #     self.cap.release()
         # if hasattr(self, 'thread'):
