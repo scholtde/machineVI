@@ -72,8 +72,8 @@ stdev = 255.0 * np.array([0.229, 0.224, 0.225])
 normalize = torchvision.transforms.Normalize(mean, stdev)
 
 # Timers
-check_time_blocked = time.time()
-check_time_free = time.time()
+check_time_damage = time.time()
+check_time_normal = time.time()
 
 # Web UI (flask)
 outputFrame = None
@@ -344,8 +344,8 @@ def pause(c_time, delay):
 
  
 def execute(change):
-    # global check_time_damage
-    # global check_time_normal
+    global check_time_damage
+    global check_time_normal
     global outputFrame, lock
 
     image = change['new']
@@ -359,9 +359,9 @@ def execute(change):
     # turn right if blocked
     if prob_cond >= 0.50:
         path = str(round(prob_cond * 100, 1)) + "% - DAMAGE"
-        # if pause(check_time_damage, 0.7):
-        #     print("DAMAGE detected")
-        #     check_time_damage = time.time()
+        if pause(check_time_damage, 0.7):
+            print("DAMAGE detected")
+            check_time_damage = time.time()
 
     # If robot is not blocked, move towards target
     else:
