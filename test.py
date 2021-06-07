@@ -351,8 +351,11 @@ def execute(change):
     image = change['new']
 
     # execute collision model to determine the condition
-    collision_output = collision_model(preprocess(image)).detach().cpu()
-    prob_cond = float(F.softmax(collision_output.flatten(), dim=0)[0])
+    # collision_output = collision_model(preprocess(image)).detach().cpu()
+    collision_output = collision_model(preprocess(image))
+    # we apply the `softmax` function to normalize the output vector so it sums to 1 (which makes it a probability distribution)
+    collision_output = F.softmax(collision_output, dim=1)
+    prob_cond = float(collision_output.flatten()[0])
     # blocked_widget.value = prob_blocked
 
     mode = "INFER"
