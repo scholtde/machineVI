@@ -313,13 +313,13 @@ def pause(c_time, delay):
 
  
 def execute(change):
-    global check_time_damage
-    global check_time_normal
+    # global check_time_damage
+    # global check_time_normal
     global outputFrame, lock
 
     image = change['new']
 
-    # execute collision model to determine if blocked
+    # execute collision model to determine the condition
     collision_output = collision_model(preprocess(image)).detach().cpu()
     prob_cond = float(F.softmax(collision_output.flatten(), dim=0)[0])
     # blocked_widget.value = prob_blocked
@@ -328,14 +328,14 @@ def execute(change):
     # turn right if blocked
     if prob_cond >= 0.50:
         path = str(round(prob_cond * 100, 1)) + "% - DAMAGE"
-        if pause(check_time_damage, 0.7):
-            print("DAMAGE detected")
-            check_time_damage = time.time()
+        # if pause(check_time_damage, 0.7):
+        #     print("DAMAGE detected")
+        #     check_time_damage = time.time()
 
     # If robot is not blocked, move towards target
     else:
         path = str(round(prob_cond * 100, 1)) + "% - NORMAL"
-        check_time_normal = time.time()
+        # check_time_normal = time.time()
 
     x = 200
     y = 275
