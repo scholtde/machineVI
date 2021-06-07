@@ -192,7 +192,7 @@ def prepare_ui(full_screen):
         surface = pygame.display.set_mode((s_width, s_height), pygame.FULLSCREEN, 32)
     else:
         s_width = 510
-        s_height = 700
+        s_height = 680
         surface = pygame.display.set_mode((s_width, s_height), 0, 32)
  
     icon = pygame.image.load('img/RCT_Logo_205x71l.png')
