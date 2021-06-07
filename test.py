@@ -434,6 +434,8 @@ def main():
     global stdev
     global normalize
     global camera
+    global normal_count
+    global damage_count
 
     while True:
         # Check Ctrl+C
@@ -536,6 +538,25 @@ def main():
                     files = glob.glob('{}/*'.format(damage_dir))
                     for f in files:
                         os.remove(f)
+
+                    normal_count = len(os.listdir(normal_dir))
+                    damage_count = len(os.listdir(damage_dir))
+                    print("Normal Count : ", normal_count)
+                    print("Damage Count : ", damage_count)
+
+                    t_y = 110
+                    t_x = 200
+                    size = 30
+                    w = 250
+                    offset = 43
+                    rec = 0, 77, 77
+                    txt_col = 255, 255, 255
+
+                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                    t_y = t_y + offset
+                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                    t_y = t_y + offset
+                    write_text(1, "DATA REMOVE", 5, t_x, t_y, size, w, size, txt_col, rec)
 
 
 # Load UI
