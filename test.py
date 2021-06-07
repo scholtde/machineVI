@@ -360,17 +360,8 @@ def execute(change):
     # blocked_widget.value = prob_blocked
 
     mode = "INFER"
-    # turn right if blocked
-    if prob_cond >= 0.50:
-        path = str(round(prob_cond * 100, 1)) + "% - DAMAGE"
-        if pause(check_time_damage, 0.7):
-            check_time_damage = time.time()
 
-    # If robot is not blocked, move towards target
-    else:
-        path = str(round(prob_cond * 100, 1)) + "% - NORMAL"
-        check_time_normal = time.time()
-
+    # Update UI
     x = 200
     y = 232
     size = 55
@@ -379,8 +370,23 @@ def execute(change):
     rec = 0, 0, 0
     txt_col = 255, 255, 255
     write_text(1, mode, 5, x, y, size, w, size, txt_col, rec)
-    y = y+offset
-    write_text(1, path, 5, x, y, size, w, size, txt_col, rec)
+
+    # turn right if blocked
+    if prob_cond >= 0.50:
+        cond = "DAMAGE - {}%".format(round(prob_cond * 100, 0))
+        txt_col = 0, 0, 255
+        y = y + offset
+        write_text(1, cond, 5, x, y, size, w, size, txt_col, rec)
+        if pause(check_time_damage, 0.7):
+            check_time_damage = time.time()
+
+    # If robot is not blocked, move towards target
+    else:
+        cond = "NORMAL - {}%".format(round(prob_cond * 100, 0))
+        txt_col = 255, 255, 0
+        y = y + offset
+        write_text(1, cond, 5, x, y, size, w, size, txt_col, rec)
+        check_time_normal = time.time()
 
     # Update image
     # image_widget.value = bgr8_to_jpeg(image)
