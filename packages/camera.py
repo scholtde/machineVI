@@ -1,5 +1,7 @@
-import traitlets
-#from traitlets.config.configurable import SingletonConfigurable
+#!/usr/bin/env python3
+
+# import traitlets
+# from traitlets.config.configurable import SingletonConfigurable
 import atexit
 import cv2
 import threading
