@@ -245,7 +245,7 @@ def ui_labels():
     write_text(1, "COND:", 85, x, y, size, w, size, txt_col, rec)
 
     x = 12
-    y = 460 
+    y = y+offset
     # windowSurface.blit(image, (x, y))
     rectangle = pygame.Rect(x, y, 480, 270)
     pygame.draw.rect(windowSurface, (50, 50, 50), rectangle, 0)
@@ -360,7 +360,7 @@ def execute(change):
     image = image.swapaxes(0, 1)
     image = pygame.surfarray.make_surface(image)
     x = 12
-    y = 460 
+    y = y+offset
     windowSurface.blit(image, (x, y))
     rectangle = pygame.Rect(x, y, 480, 270)
     pygame.display.update(rectangle)
