@@ -527,7 +527,7 @@ def main():
                         del camera
                         camera = Camera(width=width, height=height, rotate=False)
 
-                if event.key == pygame.K_DEL:
+                if event.key == pygame.K_DELETE:
                     # Remove dataset
                     files = glob.glob('{}/*'.format(normal_dir))
                     for f in files:
