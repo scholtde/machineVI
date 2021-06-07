@@ -181,7 +181,7 @@ def train_bot():
             torch.save(t_model.state_dict(), BEST_MODEL_PATH)
             best_accuracy = test_accuracy
 
-        return True
+    return True
 
 
 def prepare_ui(full_screen):
