@@ -13,6 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import time
 import random
 import os
+import glob
 import time
 import pygame, sys
 import pygame.locals
@@ -525,6 +526,15 @@ def main():
                         print("Restarting camera")
                         del camera
                         camera = Camera(width=width, height=height, rotate=False)
+
+                if event.key == pygame.K_DEL:
+                    # Remove dataset
+                    files = glob.glob('{}/*'.format(normal_dir))
+                    for f in files:
+                        os.remove(f)
+                    files = glob.glob('{}/*'.format(damage_dir))
+                    for f in files:
+                        os.remove(f)
 
 
 # Load UI
