@@ -242,9 +242,7 @@ def ui_labels():
     txt_col = 255, 255, 255
     write_text(1, "MODE:", 80, x, y, size, w, size, txt_col, rec)
     y = y+offset
-    write_text(1, "PATH:", 85, x, y, size, w, size, txt_col, rec)
-    y = y+offset
-    write_text(1, "DIRECTION:", 15, x, y, size, w, size, txt_col, rec)
+    write_text(1, "COND:", 85, x, y, size, w, size, txt_col, rec)
 
     x = 12
     y = 460 
@@ -315,30 +313,29 @@ def pause(c_time, delay):
 
  
 def execute(change):
-    global check_time_blocked
-    global check_time_free
+    global check_time_damage
+    global check_time_normal
     global outputFrame, lock
 
     image = change['new']
 
     # execute collision model to determine if blocked
     collision_output = collision_model(preprocess(image)).detach().cpu()
-    prob_blocked = float(F.softmax(collision_output.flatten(), dim=0)[0])
+    prob_cond = float(F.softmax(collision_output.flatten(), dim=0)[0])
     # blocked_widget.value = prob_blocked
 
-    direction = "STOPPED"
-    mode = "AUTO"
+    mode = "INFER"
     # turn right if blocked
-    if prob_blocked >= 0.50:
-        path = str(round(prob_blocked * 100, 1)) + "% - DAMAGE"
-        if pause(check_time_blocked, 0.7):
+    if prob_cond >= 0.50:
+        path = str(round(prob_cond * 100, 1)) + "% - DAMAGE"
+        if pause(check_time_damage, 0.7):
             print("DAMAGE detected")
-            check_time_blocked = time.time()
+            check_time_damage = time.time()
 
     # If robot is not blocked, move towards target
     else:
-        path = str(round(prob_blocked * 100, 1)) + "% - NORMAL"
-        check_time_free = time.time()
+        path = str(round(prob_cond * 100, 1)) + "% - NORMAL"
+        check_time_normal = time.time()
 
     x = 200
     y = 275
@@ -350,8 +347,6 @@ def execute(change):
     write_text(1, mode, 5, x, y, size, w, size, txt_col, rec)
     y = y+offset
     write_text(1, path, 5, x, y, size, w, size, txt_col, rec)
-    y = y+offset
-    write_text(1, direction, 5, x, y, size, w, size, txt_col, rec)
 
     # Update image
     # image_widget.value = bgr8_to_jpeg(image)
