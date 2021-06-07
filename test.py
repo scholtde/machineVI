@@ -39,17 +39,17 @@ import threading
 
 # Data collector
 print("Setup DATA Collector")
-free_dir = 'dataset/free'
-blocked_dir = 'dataset/blocked'
+normal_dir = 'dataset/free'
+damage_dir = 'dataset/blocked'
 try:
-    os.makedirs(free_dir)
-    os.makedirs(blocked_dir)
+    os.makedirs(normal_dir)
+    os.makedirs(damage_dir)
 except FileExistsError:
     print('Directories not created because they already exist')
-free_count = len(os.listdir(free_dir))
-blocked_count = len(os.listdir(blocked_dir))
-print("Free    Count : ", free_count)
-print("Blocked Count : ", blocked_count)
+normal_count = len(os.listdir(normal_dir))
+damage_count = len(os.listdir(damage_dir))
+print("Normal Count : ", normal_count)
+print("Damage Count : ", damage_count)
 
 # Camera
 width = 300
@@ -265,20 +265,20 @@ def save_snapshot(directory):
     #    f.write(image.image_array)
 
 
-def save_free():
-    global free_dir, free_count
-    save_snapshot(free_dir)
-    free_count = len(os.listdir(free_dir))
-    print("Free    Count : ", free_count)
-    print("Blocked Count : ", blocked_count)
+def save_normal():
+    global normal_dir, normal_count
+    save_snapshot(normal_dir)
+    normal_count = len(os.listdir(normal_dir))
+    print("Free    Count : ", normal_count)
+    print("Blocked Count : ", damage_count)
 
     
-def save_blocked():
-    global blocked_dir, blocked_count
-    save_snapshot(blocked_dir)
-    blocked_count = len(os.listdir(blocked_dir))
-    print("Free    Count : ", free_count)
-    print("Blocked Count : ", blocked_count)
+def save_damage():
+    global damage_dir, damage_count
+    save_snapshot(damage_dir)
+    damage_count = len(os.listdir(damage_dir))
+    print("Free    Count : ", normal_count)
+    print("Blocked Count : ", damage_count)
 
 
 def preprocess(camera_value):
