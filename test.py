@@ -159,6 +159,22 @@ def train_bot():
 
         test_accuracy = 1.0 - float(test_error_count) / float(len(test_dataset))
         print('%d: %f' % (epoch, test_accuracy))
+
+        # Write to UI
+        t_y = 110
+        t_x = 200
+        size = 30
+        w = 250
+        offset = 43
+        rec = 0, 77, 77
+        txtCol = 255, 255, 255
+
+        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+        t_y = t_y + offset
+        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txtCol, rec)
+        t_y = t_y + offset
+        write_text(1, '%d: %f' % (epoch, test_accuracy), 5, t_x, t_y, size, w, size, txtCol, rec)
+
         if test_accuracy > best_accuracy:
             torch.save(t_model.state_dict(), BEST_MODEL_PATH)
             best_accuracy = test_accuracy
@@ -464,6 +480,17 @@ def main():
                 if event.key == pygame.K_t:
                     time.sleep(1)
                     print("Training mode..")
+                    x = 200
+                    y = 232
+                    size = 55
+                    w = 270
+                    offset = 60
+                    rec = 0, 0, 0
+                    txt_col = 255, 255, 255
+                    write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
+                    y = y + offset
+                    write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
+
                     train_bot()
 
 
