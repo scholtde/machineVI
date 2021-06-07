@@ -70,6 +70,8 @@ collision_model = collision_model.to(device)
 mean = 255.0 * np.array([0.485, 0.456, 0.406])
 stdev = 255.0 * np.array([0.229, 0.224, 0.225])
 normalize = torchvision.transforms.Normalize(mean, stdev)
+
+# Timers
 check_time_blocked = time.time()
 check_time_free = time.time()
 
@@ -491,7 +493,19 @@ def main():
                     y = y + offset
                     write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
 
-                    train_bot()
+                    if train_bot():
+                        # Reload Collision Detector
+                        print("Loading Collision Model")
+                        collision_model = torchvision.models.alexnet(pretrained=False)
+                        collision_model.classifier[6] = torch.nn.Linear(collision_model.classifier[6].in_features, 2)
+                        collision_model.load_state_dict(torch.load('models/classification/best_model.pth'))
+                        device = torch.device('cuda')
+                        collision_model = collision_model.to(device)
+                        mean = 255.0 * np.array([0.485, 0.456, 0.406])
+                        stdev = 255.0 * np.array([0.229, 0.224, 0.225])
+                        normalize = torchvision.transforms.Normalize(mean, stdev)
+
+                        print("Training Complete!")
 
 
 # Load UI
