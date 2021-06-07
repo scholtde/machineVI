@@ -17,6 +17,7 @@ class Camera:
         self.capture_width = 1280
         self.capture_height = 720
         self.rotate = rotate
+        self.exec_stop = False
         # Use Below in case the camera is mounted normally
         self.gst_source = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
                           'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
@@ -32,7 +33,6 @@ class Camera:
 
         self.image_array = np.empty((self.height, self.width, 3), dtype=np.uint8)
 
-
         try:
             self.cap = cv2.VideoCapture(self.gst_source, cv2.CAP_GSTREAMER)
 
@@ -43,15 +43,18 @@ class Camera:
 
             self.image_array = img
             self.start()
-        except:
+
+        except Exception as e:
             self.stop()
             raise RuntimeError('could not initialize camera')
 
         atexit.register(self.stop)
 
-
     def capture_frames(self):
         while True:
+            if self.exec_stop:
+                return
+
             re, img = self.cap.read()
             if re:
                 if self.rotate:
@@ -61,27 +64,26 @@ class Camera:
             else:
                 break
 
-
     def exec_rotate(self):
-        self.rotate = not(self.rotate)
+        self.rotate = not self.rotate
 
-    
     def start(self):
         if not self.cap.isOpened():
             self.cap.open(self.gst_source, cv2.CAP_GSTREAMER)
         if not hasattr(self, 'thread') or not self.thread.isAlive():
             self.thread = threading.Thread(target=self.capture_frames)
             self.thread.start()
-
+            self.thread.join()
+            self.cap.release()
 
     def stop(self):
-        if hasattr(self, 'cap'):
-            self.cap.release()
-        if hasattr(self, 'thread'):
-            self.thread.join()
+        self.exec_stop = False
+        # if hasattr(self, 'cap'):
+        #     self.cap.release()
+        # if hasattr(self, 'thread'):
+        #     self.thread.join()
         # del self.cap
-            
-            
+
     def restart(self):
         self.stop()
         self.start()
