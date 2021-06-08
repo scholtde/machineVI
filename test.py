@@ -59,10 +59,10 @@ height = 300
 capture_width = 1280
 capture_height = 720
 # Webcam
-src = 'v4l2src device=/dev/video1 ! video/x-raw, width=%d, height=%d, ' \
-      'framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
-      'width=(int)%d, height=(int)%d, format=(string)BGR ! videoconvert ! appsink'\
-      % (capture_width, capture_height, fps, width, height)
+
+src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){}, framerate=(fraction)30/1 ! ' \
+      'videoconvert !  video/x-raw, , format=(string)BGR ! ' \
+      'appsink'.format(0, capture_width, capture_height)
 
 # CSI Camera
 # src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
