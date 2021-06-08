@@ -64,8 +64,8 @@ capture_height = 720
 #       'videoconvert !  video/x-raw, width=(int){}, height=(int){}, format=(string)BGR ! ' \
 #       'appsink'.format(0, capture_width, capture_height, width, height)
 src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
-      'videoconvert ! ' \
-      'appsink'.format(1, capture_width, capture_height)
+      'nvvidconv ! video/x-raw, width=(int){}, height=(int){}, format=(string)BGRx ! videoconvert ! ' \
+      'appsink'.format(1, capture_width, capture_height, width, height)
 
 # CSI Camera
 # src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
