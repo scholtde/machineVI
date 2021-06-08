@@ -613,6 +613,7 @@ def main():
 # Load UI
 print("Loading UI")
 pygame.init()
+print("Preparing surface")
 windowSurface = prepare_ui(0)
 
 # Execute MAIN
