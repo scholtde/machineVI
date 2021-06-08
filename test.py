@@ -59,7 +59,7 @@ height = 300
 capture_width = 1280
 capture_height = 720
 # Webcam
-src = 'v4l2src device=/dev/video1 ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
+src = 'v4l2src device=/dev/video1 ! video/x-raw, width=%d, height=%d, ' \
       'framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
       'width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink'\
       % (capture_width, capture_height, fps, width, height)
