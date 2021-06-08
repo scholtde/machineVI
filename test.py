@@ -53,7 +53,7 @@ print("Normal Count : ", normal_count)
 print("Damage Count : ", damage_count)
 
 # Camera
-fps = 25
+fps = 24
 width = 300
 height = 300
 capture_width = 1280
