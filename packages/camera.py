@@ -27,7 +27,7 @@ class Camera:
             time.sleep(3)
 
             re, img = self.cap.read()
-            img = cv2.resize(img, (300, 300))
+            # img = cv2.resize(img, (300, 300))
 
             if not re:
                 raise RuntimeError('camera capture error')

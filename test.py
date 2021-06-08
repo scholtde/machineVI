@@ -64,7 +64,7 @@ src = "rtspsrc location={} ! application/x-rtp, media=video, clock-rate=90000, e
       "rtph264depay ! avdec_h264 ! videoconvert ! videoscale ! videorate ! " \
       "video/x-raw, width=(int){}, height=(int){}, framerate=(fraction){}/1 ! " \
       "textoverlay text=CAM-3 valignment=bottom deltay=20 halignment=right deltax=20 color=-1 font-desc='Sans, 80' " \
-      "shaded-background=yes shading-value=30 ! appsink sync=false".format(rtsp, capture_width, capture_height, fps)
+      "shaded-background=yes shading-value=30 ! appsink sync=false".format(rtsp, width, height, fps)
 # Webcam
 # src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
 #       'videoconvert !  video/x-raw, width=(int){}, height=(int){}, format=(string)BGR ! ' \
