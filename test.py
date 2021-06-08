@@ -59,7 +59,7 @@ height = 300
 capture_width = 1280
 capture_height = 720
 # Webcam
-src = 0
+src = 1
 
 # CSI Camera
 # src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
