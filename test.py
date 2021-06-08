@@ -459,6 +459,7 @@ def main():
     global damage_count
     global training
 
+    print("Starting main loop..")
     while True:
         # Check Ctrl+C
         try:
