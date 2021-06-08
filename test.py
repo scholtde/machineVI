@@ -525,7 +525,7 @@ def main():
 
                     if event.key == pygame.K_t:
                         time.sleep(1)
-                        # camera.stop()
+                        camera.stop()
 
                         print("Training mode..")
                         training = True
@@ -539,11 +539,11 @@ def main():
                         write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
                         y = y + offset
                         write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
+                        time.sleep(5)
 
                         # Update image
                         # image_widget.value = bgr8_to_jpeg(image)
-                        image = np.empty((300, 300, 3), dtype=np.uint8)
-                        image = cv2.resize(image, (480, 270))
+                        image = np.empty((480, 270, 3), dtype=np.uint8)
                         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         image = image.swapaxes(0, 1)
                         image = pygame.surfarray.make_surface(image)
@@ -554,19 +554,31 @@ def main():
                         pygame.display.update(rectangle)
 
                         if train_bot():
-                            # Reload Collision Detector
-                            print("Loading Collision Model")
-                            collision_model = torchvision.models.alexnet(pretrained=False)
-                            collision_model.classifier[6] = torch.nn.Linear(collision_model.classifier[6].in_features, 2)
-                            collision_model.load_state_dict(torch.load('models/classification/best_model.pth'))
-                            device = torch.device('cuda')
-                            collision_model = collision_model.to(device)
-                            mean = 255.0 * np.array([0.485, 0.456, 0.406])
-                            stdev = 255.0 * np.array([0.229, 0.224, 0.225])
-                            normalize = torchvision.transforms.Normalize(mean, stdev)
+                            # # Reload Collision Detector
+                            # print("Loading Collision Model")
+                            # collision_model = torchvision.models.alexnet(pretrained=False)
+                            # collision_model.classifier[6] = torch.nn.Linear(collision_model.classifier[6].in_features, 2)
+                            # collision_model.load_state_dict(torch.load('models/classification/best_model.pth'))
+                            # device = torch.device('cuda')
+                            # collision_model = collision_model.to(device)
+                            # mean = 255.0 * np.array([0.485, 0.456, 0.406])
+                            # stdev = 255.0 * np.array([0.229, 0.224, 0.225])
+                            # normalize = torchvision.transforms.Normalize(mean, stdev)
 
                             print("Training Complete!")
-                            time.sleep(3)
+                            time.sleep(5)
+
+                            # Update labels
+                            x = 200
+                            y = 232
+                            size = 55
+                            w = 270
+                            offset = 60
+                            rec = 0, 0, 0
+                            txt_col = 255, 255, 255
+                            write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
+                            y = y + offset
+                            write_text(1, "PLS RESTART", 5, x, y, size, w, size, txt_col, rec)
 
                     if event.key == pygame.K_DELETE:
                         # Remove dataset
