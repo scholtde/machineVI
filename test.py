@@ -58,13 +58,19 @@ width = 300
 height = 300
 capture_width = 1280
 capture_height = 720
+# RTSP
+rtsp = "rtsp://192.168.1.101:554/Streaming/Channels/102"
+src = "rtspsrc location={} ! application/x-rtp, media=video, clock-rate=90000, encoding-name=H264 ! " \
+      "rtph264depay ! avdec_h264 ! videoconvert ! videoscale ! videorate ! " \
+      "video/x-raw, width=640, height=368, framerate=4/1 ! " \
+      "textoverlay text=CAM-3 valignment=bottom deltay=20 halignment=right deltax=20 color=-1 font-desc='Sans, 80' " \
+      "shaded-background=yes shading-value=30 ! appsink sync=false".format(rtsp)
 # Webcam
-
 # src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
 #       'videoconvert !  video/x-raw, width=(int){}, height=(int){}, format=(string)BGR ! ' \
 #       'appsink'.format(0, capture_width, capture_height, width, height)
-src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
-      'videoconvert ! appsink'.format(1, 640, 480)
+# src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
+#       'videoconvert ! appsink'.format(1, 640, 480)
 
 # CSI Camera
 # src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
