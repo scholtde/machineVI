@@ -65,7 +65,8 @@ capture_height = 720
 #       "video/x-raw, width=(int){}, height=(int){}, framerate=(fraction){}/1 ! " \
 #       "textoverlay text=CAM-3 valignment=bottom deltay=20 halignment=right deltax=20 color=-1 font-desc='Sans, 80' " \
 #       "shaded-background=yes shading-value=30 ! appsink sync=false".format(rtsp, width, height, fps)
-# Webcam
+
+# Webcam - Not working yet
 # src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){} ! ' \
 #       'videoconvert !  video/x-raw, width=(int){}, height=(int){}, format=(string)BGR ! ' \
 #       'appsink'.format(0, capture_width, capture_height, width, height)
