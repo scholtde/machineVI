@@ -60,8 +60,8 @@ capture_width = 1280
 capture_height = 720
 # Webcam
 src = 'v4l2src device=/dev/video1 ! video/x-raw, width=%d, height=%d, ' \
-      'framerate=(fraction)%d/1 ! videoconvert ! video/x-raw, ' \
-      'width=(int)%d, height=(int)%d, format=(string)BGR ! appsink'\
+      'framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
+      'width=(int)%d, height=(int)%d, format=(string)BGR ! videoconvert ! appsink'\
       % (capture_width, capture_height, fps, width, height)
 
 # CSI Camera
