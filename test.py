@@ -59,7 +59,7 @@ height = 300
 capture_width = 1280
 capture_height = 720
 # RTSP
-rtsp = "rtsp://192.168.1.101:554/Streaming/Channels/101"
+rtsp = "rtsp://192.168.1.101:554/Streaming/Channels/102"
 src = "rtspsrc location={} ! application/x-rtp, media=video, clock-rate=90000, encoding-name=H264 ! " \
       "rtph264depay ! avdec_h264 ! videoconvert ! videoscale ! videorate ! " \
       "video/x-raw, width=(int){}, height=(int){}, framerate=(fraction){}/1 ! " \
