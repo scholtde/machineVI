@@ -24,6 +24,7 @@ class Camera:
 
         try:
             self.cap = cv2.VideoCapture(self.gst_source, cv2.CAP_GSTREAMER)
+            time.sleep(3)
 
             re, img = self.cap.read()
 
