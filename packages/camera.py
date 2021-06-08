@@ -3,34 +3,23 @@
 # import traitlets
 # from traitlets.config.configurable import SingletonConfigurable
 import atexit
+import time
+
 import cv2
 import threading
 import numpy as np
 
 
 class Camera:
-    def __init__(self, width, height, rotate, *args, **kwargs):
+    def __init__(self, src=0, width=300, height=300, rotate=False, *args, **kwargs):
         # config
         self.width = width
         self.height = height
-        self.fps = 21
-        self.capture_width = 1280
-        self.capture_height = 720
         self.rotate = rotate
         self.exec_stop = False
+        self.pause_stream = False
         # Use Below in case the camera is mounted normally
-        self.gst_source = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
-                          'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
-                          'width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink'\
-                          % (self.capture_width, self.capture_height, self.fps, self.width, self.height)
-        if self.rotate:
-            # Use Below to Rotate Video 180deg in case the camera is mounted upside down
-            self.gst_source = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
-                              'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
-                              'width=(int)%d, height=(int)%d, ' \
-                              'format=(string)BGRx ! videoflip method=rotate-180 ! videoconvert ! appsink' \
-                              % (self.capture_width, self.capture_height, self.fps, self.width, self.height)
-
+        self.gst_source = src
         self.image_array = np.empty((self.height, self.width, 3), dtype=np.uint8)
 
         try:
@@ -55,6 +44,12 @@ class Camera:
             if self.exec_stop:
                 break
 
+            if self.pause_stream:
+                while self.pause_stream:
+                    self.image_array = np.empty((self.height, self.width, 3), dtype=np.uint8)
+                    time.sleep(1)
+                print("Resume streaming..")
+
             re, img = self.cap.read()
             if re:
                 if self.rotate:
@@ -74,12 +69,18 @@ class Camera:
             self.thread = threading.Thread(target=self.capture_frames)
             self.thread.start()
 
+    def pause(self):
+        self.pause_stream = True
+
+    def resume(self):
+        self.pause_stream = False
+
     def stop(self):
         self.exec_stop = True
-        # if hasattr(self, 'cap'):
-        #     self.cap.release()
-        # if hasattr(self, 'thread'):
-        #     self.thread.join()
+        if hasattr(self, 'cap'):
+            self.cap.release()
+        if hasattr(self, 'thread'):
+            self.thread.join()
         # del self.cap
 
     def restart(self):

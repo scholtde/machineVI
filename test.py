@@ -53,9 +53,27 @@ print("Normal Count : ", normal_count)
 print("Damage Count : ", damage_count)
 
 # Camera
+fps = 31
 width = 300
 height = 300
-camera = Camera(width=width, height=height, rotate=False)
+capture_width = 1280
+capture_height = 720
+# Webcam
+# src = 0
+
+# CSI Camera
+src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
+      'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
+      'width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink'\
+      % (capture_width, capture_height, fps, width, height)
+
+# CSI Camera - Ratate 180deg
+# src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
+#       'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
+#       'width=(int)%d, height=(int)%d, ' \
+#       'format=(string)BGRx ! videoflip method=rotate-180 ! videoconvert ! appsink' \
+#       % (capture_width, capture_height, fps, width, height)
+camera = Camera(src=src, width=width, height=height, rotate=False)
 
 # # SSD Object detector
 # print("Loading SSD Object Detector")
@@ -443,121 +461,121 @@ def main():
             # detections = model(camera.value)
             # print(detections)
             execute({'new': camera.image_array})
-           
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        camera.stop()
+                        pygame.quit()
+                        sys.exit()
+
+                    if event.key == pygame.K_r:
+                        camera.exec_rotate()
+
+                    if event.key == pygame.K_n:
+                        time.sleep(1)
+                        print("Save NORMAL")
+                        save_normal()
+
+                        t_y = 110
+                        t_x = 200
+                        size = 30
+                        w = 250
+                        offset = 43
+                        rec = 0, 77, 77
+                        txt_col = 255, 255, 255
+
+                        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
+
+                    if event.key == pygame.K_d:
+                        time.sleep(1)
+                        print("Save DAMAGE")
+                        save_damage()
+
+                        t_y = 110
+                        t_x = 200
+                        size = 30
+                        w = 250
+                        offset = 43
+                        rec = 0, 77, 77
+                        txt_col = 255, 255, 255
+
+                        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
+
+                    if event.key == pygame.K_t:
+                        camera.pause()
+                        time.sleep(1)
+                        execute({'new': camera.image_array})
+
+                        print("Training mode..")
+                        x = 200
+                        y = 232
+                        size = 55
+                        w = 270
+                        offset = 60
+                        rec = 0, 0, 0
+                        txt_col = 255, 255, 255
+                        write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
+                        y = y + offset
+                        write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
+
+                        if train_bot():
+                            # Reload Collision Detector
+                            print("Loading Collision Model")
+                            collision_model = torchvision.models.alexnet(pretrained=False)
+                            collision_model.classifier[6] = torch.nn.Linear(collision_model.classifier[6].in_features, 2)
+                            collision_model.load_state_dict(torch.load('models/classification/best_model.pth'))
+                            device = torch.device('cuda')
+                            collision_model = collision_model.to(device)
+                            mean = 255.0 * np.array([0.485, 0.456, 0.406])
+                            stdev = 255.0 * np.array([0.229, 0.224, 0.225])
+                            normalize = torchvision.transforms.Normalize(mean, stdev)
+
+                            print("Training Complete!")
+                            time.sleep(3)
+                            camera.resume()
+
+                    if event.key == pygame.K_DELETE:
+                        # Remove dataset
+                        print("Removing dataset!")
+                        files = glob.glob('{}/*'.format(normal_dir))
+                        for f in files:
+                            os.remove(f)
+                        files = glob.glob('{}/*'.format(damage_dir))
+                        for f in files:
+                            os.remove(f)
+
+                        normal_count = len(os.listdir(normal_dir))
+                        damage_count = len(os.listdir(damage_dir))
+                        print("Normal Count : ", normal_count)
+                        print("Damage Count : ", damage_count)
+
+                        t_y = 110
+                        t_x = 200
+                        size = 30
+                        w = 250
+                        offset = 43
+                        rec = 0, 77, 77
+                        txt_col = 255, 255, 255
+
+                        write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
+                        t_y = t_y + offset
+                        write_text(1, "DATA REMOVE", 5, t_x, t_y, size, w, size, txt_col, rec)
+
         except KeyboardInterrupt:
             camera.stop()
             pygame.quit()
             sys.exit()
-
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    camera.stop()
-                    pygame.quit()
-                    sys.exit()
-
-                if event.key == pygame.K_r:
-                    camera.exec_rotate()
-
-                if event.key == pygame.K_n:
-                    time.sleep(1)
-                    print("Save NORMAL")
-                    save_normal()
-
-                    t_y = 110
-                    t_x = 200
-                    size = 30
-                    w = 250
-                    offset = 43
-                    rec = 0, 77, 77
-                    txt_col = 255, 255, 255
-
-                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
-
-                if event.key == pygame.K_d:
-                    time.sleep(1)
-                    print("Save DAMAGE")
-                    save_damage()
-
-                    t_y = 110
-                    t_x = 200
-                    size = 30
-                    w = 250
-                    offset = 43
-                    rec = 0, 77, 77
-                    txt_col = 255, 255, 255
-
-                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
-
-                if event.key == pygame.K_t:
-                    time.sleep(1)
-                    camera.stop()
-                    print("Training mode..")
-                    x = 200
-                    y = 232
-                    size = 55
-                    w = 270
-                    offset = 60
-                    rec = 0, 0, 0
-                    txt_col = 255, 255, 255
-                    write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
-                    y = y + offset
-                    write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
-
-                    if train_bot():
-                        # Reload Collision Detector
-                        print("Loading Collision Model")
-                        collision_model = torchvision.models.alexnet(pretrained=False)
-                        collision_model.classifier[6] = torch.nn.Linear(collision_model.classifier[6].in_features, 2)
-                        collision_model.load_state_dict(torch.load('models/classification/best_model.pth'))
-                        device = torch.device('cuda')
-                        collision_model = collision_model.to(device)
-                        mean = 255.0 * np.array([0.485, 0.456, 0.406])
-                        stdev = 255.0 * np.array([0.229, 0.224, 0.225])
-                        normalize = torchvision.transforms.Normalize(mean, stdev)
-
-                        print("Training Complete!")
-                        print("Restarting camera")
-                        del camera
-                        camera = Camera(width=width, height=height, rotate=False)
-
-                if event.key == pygame.K_DELETE:
-                    # Remove dataset
-                    print("Removing dataset!")
-                    files = glob.glob('{}/*'.format(normal_dir))
-                    for f in files:
-                        os.remove(f)
-                    files = glob.glob('{}/*'.format(damage_dir))
-                    for f in files:
-                        os.remove(f)
-
-                    normal_count = len(os.listdir(normal_dir))
-                    damage_count = len(os.listdir(damage_dir))
-                    print("Normal Count : ", normal_count)
-                    print("Damage Count : ", damage_count)
-
-                    t_y = 110
-                    t_x = 200
-                    size = 30
-                    w = 250
-                    offset = 43
-                    rec = 0, 77, 77
-                    txt_col = 255, 255, 255
-
-                    write_text(1, str(normal_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, str(damage_count), 5, t_x, t_y, size, w, size, txt_col, rec)
-                    t_y = t_y + offset
-                    write_text(1, "DATA REMOVE", 5, t_x, t_y, size, w, size, txt_col, rec)
-
 
 # Load UI
 print("Loading UI")
