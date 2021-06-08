@@ -542,15 +542,10 @@ def main():
                         time.sleep(5)
 
                         # Update image
-                        # image_widget.value = bgr8_to_jpeg(image)
-                        image = np.empty((480, 270, 3), dtype=np.uint8)
-                        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                        image = image.swapaxes(0, 1)
-                        image = pygame.surfarray.make_surface(image)
                         x = 12
                         y = y + offset
-                        windowSurface.blit(image, (x, y))
                         rectangle = pygame.Rect(x, y, 480, 270)
+                        pygame.draw.rect(windowSurface, (50, 50, 50), rectangle, 0)
                         pygame.display.update(rectangle)
 
                         if train_bot():
