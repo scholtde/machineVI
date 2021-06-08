@@ -510,10 +510,13 @@ def main():
                         t_y = t_y + offset
                         write_text(1, "DONE", 5, t_x, t_y, size, w, size, txt_col, rec)
 
+                    if event.key == pygame.K_f:
+                        time.sleep(0.5)
+                        camera.freeze()
+
                     if event.key == pygame.K_t:
                         camera.pause()
                         time.sleep(1)
-                        execute({'new': camera.image_array})
 
                         print("Training mode..")
                         x = 200

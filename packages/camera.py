@@ -72,6 +72,9 @@ class Camera:
     def pause(self):
         self.pause_stream = True
 
+    def freeze(self):
+        self.pause_stream = not self.pause_stream
+
     def resume(self):
         self.pause_stream = False
 
