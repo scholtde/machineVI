@@ -61,7 +61,7 @@ capture_height = 720
 # Webcam
 
 src = 'v4l2src device=/dev/video{} ! video/x-raw, width=(int){}, height=(int){}, framerate=(fraction)30/1 ! ' \
-      'videoconvert !  video/x-raw, , format=(string)BGR ! ' \
+      'videoconvert !  video/x-raw, format=(string)BGR ! ' \
       'appsink'.format(0, capture_width, capture_height)
 
 # CSI Camera
