@@ -90,6 +90,9 @@ mean = 255.0 * np.array([0.485, 0.456, 0.406])
 stdev = 255.0 * np.array([0.229, 0.224, 0.225])
 normalize = torchvision.transforms.Normalize(mean, stdev)
 
+# Training
+training = False
+
 # Timers
 check_time_damage = time.time()
 check_time_normal = time.time()
@@ -454,13 +457,15 @@ def main():
     global camera
     global normal_count
     global damage_count
+    global training
 
     while True:
         # Check Ctrl+C
         try:
             # detections = model(camera.value)
             # print(detections)
-            execute({'new': camera.image_array})
+            if not training:
+                execute({'new': camera.image_array})
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -514,11 +519,16 @@ def main():
                         time.sleep(0.5)
                         camera.freeze()
 
-                    if event.key == pygame.K_t:
-                        camera.pause()
+                    if event.key == pygame.K_i:
                         time.sleep(1)
+                        training = False
+
+                    if event.key == pygame.K_t:
+                        time.sleep(1)
+                        # camera.stop()
 
                         print("Training mode..")
+                        training = True
                         x = 200
                         y = 232
                         size = 55
@@ -529,6 +539,19 @@ def main():
                         write_text(1, "TRAIN", 5, x, y, size, w, size, txt_col, rec)
                         y = y + offset
                         write_text(1, "WAIT..", 5, x, y, size, w, size, txt_col, rec)
+
+                        # Update image
+                        # image_widget.value = bgr8_to_jpeg(image)
+                        image = np.empty((300, 300, 3), dtype=np.uint8)
+                        image = cv2.resize(image, (480, 270))
+                        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        image = image.swapaxes(0, 1)
+                        image = pygame.surfarray.make_surface(image)
+                        x = 12
+                        y = y + offset
+                        windowSurface.blit(image, (x, y))
+                        rectangle = pygame.Rect(x, y, 480, 270)
+                        pygame.display.update(rectangle)
 
                         if train_bot():
                             # Reload Collision Detector
@@ -544,7 +567,6 @@ def main():
 
                             print("Training Complete!")
                             time.sleep(3)
-                            camera.resume()
 
                     if event.key == pygame.K_DELETE:
                         # Remove dataset
