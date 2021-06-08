@@ -59,13 +59,13 @@ height = 300
 capture_width = 1280
 capture_height = 720
 # Webcam
-src = 1
+# src = 1
 
 # CSI Camera
-# src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
-#       'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
-#       'width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink'\
-#       % (capture_width, capture_height, fps, width, height)
+src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
+      'format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, ' \
+      'width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink'\
+      % (capture_width, capture_height, fps, width, height)
 
 # CSI Camera - Ratate 180deg
 # src = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, ' \
